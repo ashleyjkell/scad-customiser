@@ -27,6 +27,27 @@ export const models = [
   },
 ];
 
+const CUSTOM_MODELS_KEY = 'craftidad-custom-models';
+
+export function getCustomModels() {
+  try {
+    return JSON.parse(localStorage.getItem(CUSTOM_MODELS_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+export function saveCustomModel(model) {
+  const customs = getCustomModels();
+  customs.push(model);
+  localStorage.setItem(CUSTOM_MODELS_KEY, JSON.stringify(customs));
+}
+
+export function deleteCustomModel(id) {
+  const customs = getCustomModels().filter(m => m.id !== id);
+  localStorage.setItem(CUSTOM_MODELS_KEY, JSON.stringify(customs));
+}
+
 export function getModelById(id) {
-  return models.find(m => m.id === id);
+  return models.find(m => m.id === id) ?? getCustomModels().find(m => m.id === id);
 }
